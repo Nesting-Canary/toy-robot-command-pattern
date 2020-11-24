@@ -5,40 +5,112 @@ describe ToyRobot::Client do
   subject {ToyRobot::Client.new}
   let (:game) {instance_double(ToyRobot::ToyRobot.new)}
 
-  context 'when process initialises game command' do
+  context 'when process initialise game command' do
     it 'succeeds' do
       # Passing in game references, as the client could be handling multiple game instances at once
-      command = subject.process("5,5", :game)
+      command = subject.build_command("5,5", :game)
 
       expect(command.name).to eq(:build_flat_land)
       expect(command.receiver).to eq(:game)
       expect(command.args).to eq([5,5])
     end
+
   end
 
   context 'when processing PLACE command' do
     it 'succeeds' do
       # Passing in game references, as the client could be handling multiple game instances at once
-      command = subject.process("PLACE 0,0,N", :game)
+      command = subject.build_command("PLACE 0,0,N", :game)
 
-      pending "Need to implement the following"
       expect(command.name).to eq(:place)
       expect(command.receiver).to eq(:game)
-      expect(command.args).to eq([0,0,:north])
+      expect(command.args).to eq([0,0,"N"])
     end
 
-    it 'fails' do
-      skip 'Not implemented'
+    it 'succeeds if no args passed to PLACE, returns default of 0,0,N' do
+      command = subject.build_command("PLACE", :game)
+
+      expect(command.name).to eq(:place)
+      expect(command.receiver).to eq(:game)
+      expect(command.args).to eq([0,0,"N"])
+    end
+
+    it 'fails if does not match command format' do
+      command = subject.build_command("PLACE 0,0,X", :game)
+
+      # Using a nil command, as requirement is to keep processing if an invalid command is found
+      # Normally I would raise and error here but this requirement requires a NilCommand object/pattern
+      expect(command.name).to eq(:nil_command)
+      expect(command.receiver).to eq(:game)
+      expect(command.args.length).to eq(0)
+    end
+
+    it 'fails if extra whitespace between PLACE and args' do
+      command = subject.build_command("PLACE   0,0,X", :game)
+
+      # Using a nil command, as requirement is to keep processing if an invalid command is found
+      # Normally I would raise and error here but this requirement requires a NilCommand object/pattern
+      expect(command.name).to eq(:nil_command)
+      expect(command.receiver).to eq(:game)
+      expect(command.args.length).to eq(0)
     end
   end
 
   context 'when processing MOVE command' do
     it 'succeeds' do
-      skip 'Not implemented'
+      command = subject.build_command("MOVE", :game)
+
+      expect(command.name).to eq(:move)
+      expect(command.receiver).to eq(:game)
+      expect(command.args.length).to eq(0)
+    end
+  end
+
+  context 'when processing LEFT command' do
+    it 'succeeds' do
+      command = subject.build_command("LEFT", :game)
+
+      expect(command.name).to eq(:left)
+      expect(command.receiver).to eq(:game)
+      expect(command.args.length).to eq(0)
+    end
+  end
+
+  context 'when processing RIGHT command' do
+    it 'succeeds' do
+      command = subject.build_command("RIGHT", :game)
+
+      expect(command.name).to eq(:right)
+      expect(command.receiver).to eq(:game)
+      expect(command.args.length).to eq(0)
+    end
+  end
+
+  context 'when processing REPORT command' do
+    it 'succeeds' do
+      command = subject.build_command("REPORT", :game)
+
+      expect(command.name).to eq(:report)
+      expect(command.receiver).to eq(:game)
+      expect(command.args.length).to eq(0)
+    end
+  end
+
+  context 'when process ALL commands' do
+    it 'succeeds if lowercase, converts all commands to uppercase before parsing' do
+      command = subject.build_command("place 0,0,w", :game)
+
+      expect(command.name).to eq(:place)
+      expect(command.receiver).to eq(:game)
+      expect(command.args).to eq([0,0,"W"])
     end
 
-    it 'fails' do
-      skip 'Not implemented'
+    it 'succeeds if whitespace at front or end of command, strips whitespace before parsing' do
+      command = subject.build_command(" RIGHT ", :game)
+
+      expect(command.name).to eq(:right)
+      expect(command.receiver).to eq(:game)
+      expect(command.args.length).to eq(0)
     end
   end
 end
