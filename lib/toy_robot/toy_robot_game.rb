@@ -26,8 +26,13 @@ module ToyRobot
     def place(x = 0, y = 0, direction = 'N')
       return self unless !flat_land.nil?
 
-      toy_robot.position = [x,y]
-      toy_robot.direction = direction
+      toy_robot.place(x, y, direction)
+
+      self
+    end
+
+    def move
+      toy_robot.move
 
       self
     end

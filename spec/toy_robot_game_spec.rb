@@ -85,10 +85,35 @@ describe ToyRobot::ToyRobotGame do
       expect(game.toy_robot.position).to be_nil
       expect(game.toy_robot.direction).to be_nil
     end
+
+    it 'fails if direction is invalid' do
+      skip 'Not implemented'
+    end
+
+    it 'fails if position is invalid' do
+      skip 'Not implemented'
+    end
   end
 
   context 'MOVE command' do
+    it 'succeeds when MOVE' do
+      subject.build_flat_land(5, 5)
+      subject.place
 
+      game = subject.move
+
+      expect(game).to eq(subject)
+      expect(game.toy_robot.position).to eq([0, 1])
+      expect(game.toy_robot.direction).to eq(:north)
+    end
+
+    it 'no change when MOVE BEFORE initialise' do
+      skip 'Not implemented'
+    end
+
+    it 'no change when MOVE BEFORE PLACE' do
+      skip 'Not implemented'
+    end
   end
 
   context 'LEFT command' do
