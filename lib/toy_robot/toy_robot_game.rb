@@ -1,6 +1,6 @@
 module ToyRobot
   class ToyRobotGame
-    attr_reader :toy_robot
+    attr_reader :toy_robot, :flat_land
 
     def initialize (toy_robot)
       @toy_robot = toy_robot
@@ -16,7 +16,9 @@ module ToyRobot
       end
 
 
-      FlatLand.new(width, height)
+      @flat_land = FlatLand.new(width, height)
+
+      self
     end
   end
 end

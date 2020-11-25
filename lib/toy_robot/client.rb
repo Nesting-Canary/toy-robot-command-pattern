@@ -44,7 +44,8 @@ module ToyRobot
         command = :nil_command
       end
 
-      Command.new(command, args, receiver)
+      #TODO refactor to use an ID generator to ensure uniqueness
+      Command.new(1, command, *args, receiver)
     end
 
     #

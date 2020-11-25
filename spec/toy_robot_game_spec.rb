@@ -13,24 +13,24 @@ describe ToyRobot::ToyRobotGame do
 
   context 'when initialising the game' do
     it 'succeeds when 5,5 default passed in' do
-      flat_land = subject.build_flat_land(5, 5)
+      game = subject.build_flat_land(5, 5)
 
-      expect(flat_land.width).to eq(5)
-      expect(flat_land.height).to eq(5)
+      expect(game.flat_land.width).to eq(5)
+      expect(game.flat_land.height).to eq(5)
     end
 
     it 'succeeds when no values passed in, reverts to default: 5,5' do
-      flat_land = subject.build_flat_land
+      game = subject.build_flat_land
 
-      expect(flat_land.width).to eq(5)
-      expect(flat_land.height).to eq(5)
+      expect(game.flat_land.width).to eq(5)
+      expect(game.flat_land.height).to eq(5)
     end
 
     it 'succeeds when other valid option passed in, 1,1' do
-      flat_land = subject.build_flat_land(1,3)
+      game = subject.build_flat_land(1,3)
 
-      expect(flat_land.width).to eq(1)
-      expect(flat_land.height).to eq(3)
+      expect(game.flat_land.width).to eq(1)
+      expect(game.flat_land.height).to eq(3)
     end
 
     it 'fails when x is below minimum of 1 ' do
