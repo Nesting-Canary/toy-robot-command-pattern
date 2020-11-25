@@ -35,7 +35,7 @@ describe ToyRobot::Command do
       expect(commandOne.hash).to eq(commandTwo.hash)
     end
 
-    it 'different command returns differnt hash' do
+    it 'different command returns different hash' do
       game = ToyRobot::ToyRobotGame.new ToyRobot::ToyRobot.new
       commandOne = ToyRobot::Command.new 1, :build_flat_land, 5, 5, game
       commandTwo = ToyRobot::Command.new 2, :place, 0, 0, 'N', game
@@ -57,11 +57,14 @@ describe ToyRobot::Command do
       commandTwo = ToyRobot::Command.new 1, :build_flat_land, 5, 5, game
 
       expect(commandOne).to eq(commandTwo)
-
     end
 
-    it 'different commands are not equal' do
+    it 'same command with different ids are not equal' do
+      game = ToyRobot::ToyRobotGame.new ToyRobot::ToyRobot.new
+      commandOne = ToyRobot::Command.new 1, :place, 0, 0, 'N' , game
+      commandTwo = ToyRobot::Command.new 2, :place, 0, 0, 'N', game
 
+      expect(commandOne).not_to eq(commandTwo)
     end
   end
 end

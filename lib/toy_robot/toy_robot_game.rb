@@ -1,3 +1,5 @@
+require 'toy_robot/toy_robot'
+
 module ToyRobot
   class ToyRobotGame
     attr_reader :toy_robot, :flat_land
@@ -17,6 +19,15 @@ module ToyRobot
 
 
       @flat_land = FlatLand.new(width, height)
+
+      self
+    end
+
+    def place(x = 0, y = 0, direction = 'N')
+      return self unless !flat_land.nil?
+
+      toy_robot.position = [x,y]
+      toy_robot.direction = direction
 
       self
     end
