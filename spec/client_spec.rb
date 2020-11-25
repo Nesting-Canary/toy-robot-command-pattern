@@ -3,9 +3,9 @@ require 'spec_helper'
 
 describe ToyRobot::Client do
   subject {ToyRobot::Client.new}
-  let (:game) {instance_double(ToyRobot::ToyRobot.new)}
+  let (:game) {instance_double(ToyRobot::ToyRobotGame.new ToyRobot::ToyRobot.new)}
 
-  context 'when process initialise game command' do
+  context 'when building initialise game command' do
     it 'succeeds' do
       # Passing in game references, as the client could be handling multiple game instances at once
       command = subject.build_command("5,5", :game)
@@ -17,7 +17,7 @@ describe ToyRobot::Client do
 
   end
 
-  context 'when processing PLACE command' do
+  context 'when building PLACE command' do
     it 'succeeds' do
       # Passing in game references, as the client could be handling multiple game instances at once
       command = subject.build_command("PLACE 0,0,N", :game)
@@ -56,7 +56,7 @@ describe ToyRobot::Client do
     end
   end
 
-  context 'when processing MOVE command' do
+  context 'when building MOVE command' do
     it 'succeeds' do
       command = subject.build_command("MOVE", :game)
 
@@ -66,7 +66,7 @@ describe ToyRobot::Client do
     end
   end
 
-  context 'when processing LEFT command' do
+  context 'when building LEFT command' do
     it 'succeeds' do
       command = subject.build_command("LEFT", :game)
 
@@ -76,7 +76,7 @@ describe ToyRobot::Client do
     end
   end
 
-  context 'when processing RIGHT command' do
+  context 'when building RIGHT command' do
     it 'succeeds' do
       command = subject.build_command("RIGHT", :game)
 
@@ -86,7 +86,7 @@ describe ToyRobot::Client do
     end
   end
 
-  context 'when processing REPORT command' do
+  context 'when building REPORT command' do
     it 'succeeds' do
       command = subject.build_command("REPORT", :game)
 
@@ -96,7 +96,7 @@ describe ToyRobot::Client do
     end
   end
 
-  context 'when process ALL commands' do
+  context 'when building ALL commands' do
     it 'succeeds if lowercase, converts all commands to uppercase before parsing' do
       command = subject.build_command("place 0,0,w", :game)
 
@@ -112,5 +112,31 @@ describe ToyRobot::Client do
       expect(command.receiver).to eq(:game)
       expect(command.args.length).to eq(0)
     end
+  end
+
+  context('execute commands') do
+    it 'succeeds to execute a single command' do
+      command = instance_double("Command")
+      expect(command).to receive(:execute) {[:success, :game]}
+
+      results = subject.execute([command])
+      expect(results[command][0]).to eq(:success)
+      expect(results[command][1]).to eq(:game)
+    end
+
+    it 'succeeds to execute multiple commands' do
+      command = double(ToyRobot::Command)
+      commandTwo = double(ToyRobot::Command)
+      expect(command).to receive(:execute) {[:success, :game]}
+      expect(commandTwo).to receive(:execute) {[:fail, :game]}
+
+      results = subject.execute([command, commandTwo])
+      expect(results.length).to eq(2)
+      expect(results[command][0]).to eq(:success)
+      expect(results[command][1]).to eq(:game)
+      expect(results[commandTwo][0]).to eq(:fail)
+      expect(results[commandTwo][1]).to eq(:game)
+    end
+
   end
 end
