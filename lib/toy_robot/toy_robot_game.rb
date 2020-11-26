@@ -19,22 +19,16 @@ module ToyRobot
 
 
       @flat_land = FlatLand.new(width, height)
-
-      self
     end
 
     def place(x = 0, y = 0, direction = 'N')
       return self unless !flat_land.nil?
 
       toy_robot.place(x, y, direction)
-
-      self
     end
 
     def move
       toy_robot.move
-
-      self
     end
   end
 end

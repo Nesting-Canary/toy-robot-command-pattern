@@ -5,6 +5,8 @@ describe ToyRobot::ToyRobotGame do
   toy_robot = ToyRobot::ToyRobot.new
   subject { ToyRobot::ToyRobotGame.new toy_robot }
 
+  # TODO refactor to NOT return game instance, as we don't use this feature (may use this for event sourced pattern,
+  # immutable state option)
   context 'constructing a game' do
     it 'succeeds in constructing game with robot dependency' do
       expect(subject.toy_robot).to eq(toy_robot)
@@ -18,24 +20,24 @@ describe ToyRobot::ToyRobotGame do
     end
 
     it 'succeeds when 5,5 default passed in' do
-      game = subject.build_flat_land(5, 5)
+      subject.build_flat_land(5, 5)
 
-      expect(game.flat_land.width).to eq(5)
-      expect(game.flat_land.height).to eq(5)
+      expect(subject.flat_land.width).to eq(5)
+      expect(subject.flat_land.height).to eq(5)
     end
 
     it 'succeeds when no values passed in, reverts to default: 5,5' do
-      game = subject.build_flat_land
+      subject.build_flat_land
 
-      expect(game.flat_land.width).to eq(5)
-      expect(game.flat_land.height).to eq(5)
+      expect(subject.flat_land.width).to eq(5)
+      expect(subject.flat_land.height).to eq(5)
     end
 
     it 'succeeds when other valid option passed in, 1,1' do
       game = subject.build_flat_land(1,3)
 
-      expect(game.flat_land.width).to eq(1)
-      expect(game.flat_land.height).to eq(3)
+      expect(subject.flat_land.width).to eq(1)
+      expect(subject.flat_land.height).to eq(3)
     end
 
     it 'fails when x is below minimum of 1 ' do
@@ -63,27 +65,27 @@ describe ToyRobot::ToyRobotGame do
 
     it 'succeeds when placing command' do
       subject.build_flat_land(5, 5)
-      game = subject.place(0, 0, 'N')
+      subject.place(0, 0, 'N')
 
-      expect(game.toy_robot.position).to eq([0,0])
-      expect(game.toy_robot.direction).to eq(:north)
+      expect(subject.toy_robot.position).to eq([0,0])
+      expect(subject.toy_robot.direction).to eq(:north)
     end
 
     it 'succeeds when placing command using default args' do
       subject.build_flat_land(5, 5)
-      game = subject.place
+      subject.place
 
-      expect(game.toy_robot.position).to eq([0,0])
-      expect(game.toy_robot.direction).to eq(:north)
+      expect(subject.toy_robot.position).to eq([0,0])
+      expect(subject.toy_robot.direction).to eq(:north)
     end
 
     it 'no change to game when PLACE command BEFORE initialise' do
-      game = subject.place
+      subject.place
 
-      expect(game).to eq(subject)
-      expect(game.flat_land).to be_nil
-      expect(game.toy_robot.position).to be_nil
-      expect(game.toy_robot.direction).to be_nil
+      expect(subject).to eq(subject)
+      expect(subject.flat_land).to be_nil
+      expect(subject.toy_robot.position).to be_nil
+      expect(subject.toy_robot.direction).to be_nil
     end
 
     it 'fails if direction is invalid' do
@@ -100,11 +102,11 @@ describe ToyRobot::ToyRobotGame do
       subject.build_flat_land(5, 5)
       subject.place
 
-      game = subject.move
+      subject.move
 
-      expect(game).to eq(subject)
-      expect(game.toy_robot.position).to eq([0, 1])
-      expect(game.toy_robot.direction).to eq(:north)
+      expect(subject).to eq(subject)
+      expect(subject.toy_robot.position).to eq([0, 1])
+      expect(subject.toy_robot.direction).to eq(:north)
     end
 
     it 'no change when MOVE BEFORE initialise' do

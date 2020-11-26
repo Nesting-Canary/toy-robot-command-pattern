@@ -7,11 +7,11 @@ describe ToyRobot::Command do
       result = command.execute
 
       expect(result[command][0]).to eq(:success)
-      expect(result[command][1].flat_land.width).to eq(5)
-      expect(result[command][1].flat_land.height).to eq(5)
-      #TODO: For now we are modifying a single instance of the game, but in the future
-      # we may want to keep seperate instance of the game prior to the command call and after.
-      # This isn't a requirement yet.
+      expect(result[command][1].width).to eq(5)
+      expect(result[command][1].height).to eq(5)
+      # We are checking the same instance of the Game here, however we may refactor this
+      # in the future and make state immutable, so adding a check to show this design decision
+      # is intentional.
       expect(command.receiver.flat_land.width).to eq(5)
       expect(command.receiver.flat_land.height).to eq(5)
     end
@@ -21,7 +21,6 @@ describe ToyRobot::Command do
   context 'command can be used as a key' do
     it 'same command instance returns same hash' do
       game = ToyRobot::ToyRobotGame.new ToyRobot::ToyRobot.new
-      command = ToyRobot::Command.new :build_flat_land, 5, 5, game
       command = ToyRobot::Command.new :build_flat_land, 5, 5, game
 
       expect(command.hash).to eq(command.hash)
