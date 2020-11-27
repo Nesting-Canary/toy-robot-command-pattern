@@ -3,7 +3,8 @@ require 'toy_robot/toy_robot'
 module ToyRobot
   class ToyRobotGame
     attr_reader :toy_robot, :flat_land
-    #used for testing only
+
+    # used for testing only
     attr_writer :flat_land
 
     def initialize (toy_robot)

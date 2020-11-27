@@ -34,7 +34,7 @@ module ToyRobot
     end
 
     def left
-      return unless !(position.nil? && direction.nil?)
+      return unless isPlaced?
 
       directions = @directions.values
       index = directions.find_index(@direction)
@@ -42,7 +42,7 @@ module ToyRobot
     end
 
     def right
-      return unless !(position.nil? && direction.nil?)
+      return unless isPlaced?
 
       directions = @directions.values
       index = directions.find_index(@direction)
@@ -53,11 +53,15 @@ module ToyRobot
     end
 
     def report
-      return unless !(position.nil? && direction.nil?)
+      return unless isPlaced?
       "Position: #{@position} Direction: #{@direction}"
     end
 
     private
+
+    def isPlaced?
+      !(position.nil? && direction.nil?)
+    end
 
     # @todo figure out how to test private methods
     def direction= code
