@@ -10,7 +10,13 @@ module ToyRobot
     end
 
     def execute
-      {self => [:success, receiver.send(name, *args)]}
+      result = receiver.send(name, *args)
+      isSuccessful = :fail
+
+     isSuccessful = :success unless result.nil?
+
+
+      [isSuccessful, result]
     end
 
     def hash
