@@ -16,20 +16,7 @@ describe ToyRobot::ToyRobotGame do
     toy_robot =  ToyRobot::ToyRobot.new
     subject(:game) { ToyRobot::ToyRobotGame.new toy_robot }
 
-    it 'succeeds to call build_flat_land on FlatLand' do
-      flat_land = class_double(ToyRobot::FlatLand)
-      game = ToyRobot::ToyRobotGame.new toy_robot, flat_land
-
-      expect(flat_land).to receive(:build_flat_land).with(5,5) {"a new flat_land"}
-
-      result = game.build_flat_land
-
-      expect(result).to eq("a new flat_land")
-    end
-
     it 'succeeds to create FlatLand' do
-      expect(game.flat_land).to be_nil
-
       result = game.build_flat_land(10,12)
 
       expect(result).to eq(game.flat_land)
@@ -40,11 +27,13 @@ describe ToyRobot::ToyRobotGame do
   end
 
   context 'when executing place command' do
-    subject(:toy_robot) { double("ToyRobot::ToyRobot.new") }
-    subject(:flat_land) { double("ToyRobot::FlatLand.new(5,5)") }
-    subject(:game) { ToyRobot::ToyRobotGame.new(toy_robot, flat_land) }
+    toy_robot =  ToyRobot::ToyRobot.new
+    subject(:game) { ToyRobot::ToyRobotGame.new(toy_robot) }
 
     it 'succeeds' do
+      flat_land = double(ToyRobot::FlatLand.new(5,5))
+      game.flat_land = flat_land
+
       expect(flat_land).to receive(:nil?) {false}
       expect(flat_land).to receive(:isValid?).with(0,0) {true}
       expect(toy_robot).to receive(:place).with(0,0,'N')
@@ -53,6 +42,9 @@ describe ToyRobot::ToyRobotGame do
     end
 
     it 'succeeds when using default args' do
+      flat_land = double(ToyRobot::FlatLand.new(5,5))
+      game.flat_land = flat_land
+
       expect(flat_land).to receive(:nil?) {false}
       expect(flat_land).to receive(:isValid?).with(0,0) {true}
       expect(toy_robot).to receive(:place).with(0,0,'N')
@@ -61,6 +53,9 @@ describe ToyRobot::ToyRobotGame do
     end
 
     it 'fails if flat_land is not built' do
+      flat_land = double(ToyRobot::FlatLand.new(5,5))
+      game.flat_land = flat_land
+
       expect(flat_land).to receive(:nil?) {true}
       expect(flat_land).not_to receive(:isValid?).with(0,0)
       expect(toy_robot).not_to receive(:place).with(0,0,'N')
@@ -69,6 +64,9 @@ describe ToyRobot::ToyRobotGame do
     end
 
     it 'fails if position is invalid' do
+      flat_land = double(ToyRobot::FlatLand.new(5,5))
+      game.flat_land = flat_land
+
       expect(flat_land).to receive(:nil?) {false}
       expect(flat_land).to receive(:isValid?).with(-1,0) {false}
       expect(toy_robot).not_to receive(:place).with(-1,0,'N')

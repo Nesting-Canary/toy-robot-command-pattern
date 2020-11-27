@@ -3,17 +3,15 @@ require 'toy_robot/toy_robot'
 module ToyRobot
   class ToyRobotGame
     attr_reader :toy_robot, :flat_land
+    #used for testing only
+    attr_writer :flat_land
 
-    def initialize (toy_robot, flat_land = nil)
+    def initialize (toy_robot)
       @toy_robot = toy_robot
-      @flat_land = flat_land #used for testing only
     end
 
     def build_flat_land(width = 5, height = 5)
-      return @flat_land = FlatLand.build_flat_land(width, height) unless !@flat_land.nil?
-
-      # This line is used for testing onlye
-      @flat_land = @flat_land.build_flat_land(width, height)
+      @flat_land = FlatLand.build_flat_land(width, height)
     end
 
     def place(x = 0, y = 0, direction = 'N')
