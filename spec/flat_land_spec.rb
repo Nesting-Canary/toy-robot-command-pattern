@@ -2,28 +2,39 @@ require 'rspec'
 require 'spec_helper'
 
 describe ToyRobot::FlatLand do
-  it 'fails to PLACE when place x coordinate exceeds maximum' do
-    flat_land = ToyRobot::FlatLand.new(5,5)
 
-    expect(flat_land.isValid?(5, 0)).to eq(false)
+  context 'when flat_land is initialized' do
+    it 'sets the width and height fields' do
+      flat_land = ToyRobot::FlatLand.new(5, 6)
+
+      expect(flat_land.width).to eq(5)
+      expect(flat_land.height).to eq(6)
+    end
+
   end
 
-  it 'fails to place when place x coordinate below minimum' do
-    flat_land = ToyRobot::FlatLand.new(5,5)
+  context "when flat_land is valid called" do
+    subject(:flat_land) { ToyRobot::FlatLand.new(5,5) }
 
-    expect(flat_land.isValid?(-1, 0)).to eq(false)
-  end
+    it 'returns true when x and y coordinate within limits'do
+      expect(flat_land.isValid?(4, 0)).to eq(true)
+    end
 
-  it 'fails to place when y coordinate exceeds maximum' do
-    flat_land = ToyRobot::FlatLand.new(5,5)
+    it 'returns false when x coordinate exceeds maximum' do
+      expect(flat_land.isValid?(5, 0)).to eq(false)
+    end
 
-    expect(flat_land.isValid?(0, 5)).to eq(false)
-  end
+    it 'returns flalse when place x coordinate below minimum' do
+      expect(flat_land.isValid?(-1, 0)).to eq(false)
+    end
 
-  it 'fails to place when y coordinate below minimum' do
-    flat_land = ToyRobot::FlatLand.new(5,5)
+    it 'returns false when y coordinate exceeds maximum' do
+      expect(flat_land.isValid?(0, 5)).to eq(false)
+    end
 
-    expect(flat_land.isValid?(0, -1)).to eq(false)
+    it 'returns false when y coordinate below minimum' do
+      expect(flat_land.isValid?(0, -1)).to eq(false)
+    end
   end
 
 end
