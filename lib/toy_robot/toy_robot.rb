@@ -6,16 +6,16 @@ require "toy_robot/command"
 
 module ToyRobot
   class ToyRobot
-    attr_reader :position, :direction
+    attr_reader :position, :direction, :directions
 
     def initialize
       @position = nil
       @direction = nil
-      @lookup = {'N' => :north, 'E' => :east, 'S' => :south, 'W' => :west}
+      @directions = {'N' => :north, 'E' => :east, 'S' => :south, 'W' => :west}
     end
 
     def place(x, y, code)
-      return unless !@lookup[code].nil?
+      return unless !@directions[code].nil? && x != nil && y !=nil
 
       @position = [x,y]
       self.direction = code
@@ -26,7 +26,7 @@ module ToyRobot
         @position[1] += 1
       elsif (@direction == :south)
         @position[1] -= 1
-      elsif (@direction == :east)
+      elsif @direction == :east
         @position[0] += 1
       elsif (@direction == :west)
         @position[0] -= 1
@@ -36,7 +36,7 @@ module ToyRobot
     def left
       return unless !(position.nil? && direction.nil?)
 
-      directions = @lookup.values
+      directions = @directions.values
       index = directions.find_index(@direction)
       @direction = directions[index - 1]
     end
@@ -44,7 +44,7 @@ module ToyRobot
     def right
       return unless !(position.nil? && direction.nil?)
 
-      directions = @lookup.values
+      directions = @directions.values
       index = directions.find_index(@direction)
 
       return @direction = directions[index + 1] unless index == 3
@@ -53,13 +53,15 @@ module ToyRobot
     end
 
     def report
+      return unless !(position.nil? && direction.nil?)
       "Position: #{@position} Direction: #{@direction}"
     end
 
     private
 
+    # @todo figure out how to test private methods
     def direction= code
-      @direction = @lookup[code]
+      @direction = @directions[code]
     end
 
   end
