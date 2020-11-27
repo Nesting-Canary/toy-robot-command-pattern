@@ -39,5 +39,9 @@ module ToyRobot
     def right
       toy_robot.right
     end
+
+    def report
+      toy_robot.report
+    end
   end
 end

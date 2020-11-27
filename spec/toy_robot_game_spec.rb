@@ -121,4 +121,18 @@ describe ToyRobot::ToyRobotGame do
       game.right
     end
   end
+
+  context 'when executing report command' do
+    it 'succeeds' do
+      toy_robot = double(ToyRobot::ToyRobot.new)
+      game = ToyRobot::ToyRobotGame.new toy_robot
+
+      expectedReturnValue = "Reporting on this"
+      expect(toy_robot).to receive(:report) { expectedReturnValue }
+
+      result = game.report
+
+      expect(result).to eq(expectedReturnValue)
+    end
+  end
 end
