@@ -12,6 +12,10 @@ module ToyRobot
     # Design decision: Could have created a builder method on the Command object to construct new Commands from input string, but
     # decided to follow the strict definition for the command pattern, that the Client constructs commands and links them to their
     # receivers as described here: http://www.blackwasp.co.uk/Command.aspx
+    #
+    # Design decision: Multiple game instances can be running at a time. This is because the command objects contain a receiver
+    # object to execute the command on (can be any game instance). The results from execute also store the result against the
+    # command to support multiple game instances. Wasn't much extra effort to do this. 
     def build_command(input, receiver)
       args = []
       input = input.upcase.strip
