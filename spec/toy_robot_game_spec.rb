@@ -16,39 +16,27 @@ describe ToyRobot::ToyRobotGame do
     toy_robot =  ToyRobot::ToyRobot.new
     subject(:game) { ToyRobot::ToyRobotGame.new toy_robot }
 
-    it 'uses width and height' do
-      game.build_flat_land(10, 10)
+    it 'succeeds to call build_flat_land on FlatLand' do
+      flat_land = class_double(ToyRobot::FlatLand)
+      game = ToyRobot::ToyRobotGame.new toy_robot, flat_land
 
+      expect(flat_land).to receive(:build_flat_land).with(5,5) {"a new flat_land"}
+
+      result = game.build_flat_land
+
+      expect(result).to eq("a new flat_land")
+    end
+
+    it 'succeeds to create FlatLand' do
+      expect(game.flat_land).to be_nil
+
+      result = game.build_flat_land(10,12)
+
+      expect(result).to eq(game.flat_land)
       expect(game.flat_land.width).to eq(10)
-      expect(game.flat_land.height).to eq(10)
+      expect(game.flat_land.height).to eq(12)
     end
 
-    it 'uses default width and height' do
-      game.build_flat_land
-
-      expect(game.flat_land.width).to eq(5)
-      expect(game.flat_land.height).to eq(5)
-    end
-
-    it 'fails when width is below minimum' do
-      expect{game.build_flat_land(0,3)}.to raise_error("Can't build flat land, width and height must be greater than 0")
-      expect(game.flat_land).to be_nil
-    end
-
-    it 'fails when height is below minimum' do
-      expect{game.build_flat_land(3,0)}.to raise_error("Can't build flat land, width and height must be greater than 0")
-      expect(game.flat_land).to be_nil
-    end
-
-    it 'fails when width in non numeric' do
-      expect{game.build_flat_land('z',3)}.to raise_error("Can't build flat land, expected a number but got 'z' '3'")
-      expect(game.flat_land).to be_nil
-    end
-
-    it 'fails when height it non numeric' do
-      expect{game.build_flat_land(3,"abc")}.to raise_error("Can't build flat land, expected a number but got '3' 'abc'")
-      expect(game.flat_land).to be_nil
-    end
   end
 
   context 'when executing place command' do
@@ -65,9 +53,10 @@ describe ToyRobot::ToyRobotGame do
     end
 
     it 'succeeds when using default args' do
+      expect(flat_land).to receive(:nil?) {false}
+      expect(flat_land).to receive(:isValid?).with(0,0) {true}
       expect(toy_robot).to receive(:place).with(0,0,'N')
 
-      game.build_flat_land(5, 5)
       game.place
     end
 

@@ -2,7 +2,6 @@ module ToyRobot
   class Client
     # todo: Consider moving the parsing input to the command object, i.e builder pattern
     # todo: Add HEREDOC
-    # todo: Simplify this method
     # Design decision: Decided to decouple the incoming command from the method call name by
     # define the symbol :left rather than just create a symbol from the string 'LEFT'. This way
     # the incoming command could be 'TURN LEFT' while the method name still mapped to :left.
@@ -48,12 +47,6 @@ module ToyRobot
       Command.new(1, command, *args, receiver)
     end
 
-    #
-    # Design decision: Decided to return a results hash to maintain the state of the
-    # game prior to the command being executed and the state after successful or failed execution.
-    # This could come in handy if we want to be able to replay moves in the future, will also
-    # support multiple game instances running at once. Plus it's also how I've seen the command pattern
-    # implemented in production applications in the past.
     def execute(commands)
       results = Hash.new
       commands.each { |command| results[command] = command.execute}
